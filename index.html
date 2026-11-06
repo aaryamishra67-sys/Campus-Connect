@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#0b3a8f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Campus Connect"><link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Campus%20Connect%22%2C%22short_name%22%3A%22Campus%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%2C%22background_color%22%3A%22%230b3a8f%22%2C%22theme_color%22%3A%22%230b3a8f%22%7D"><title>Campus Connect – DDUGU</title>
+<style>
+:root{--bg:#f1f5fb;--card:#fff;--tx:#0f1b3d;--mut:#64708a;--pri:#0b3a8f;--ln:#d9e0ee;--ok:#e3f6ec;--okb:#2e9e6b;--bad:#fdeaea;--badb:#d24b4b;--dim:#eef1f6}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0c1224;--card:#151d36;--tx:#e8edfb;--mut:#98a3c0;--pri:#3b72e0;--ln:#27324f;--ok:#12301f;--bad:#3a1717;--dim:#1b2442}}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-top:env(safe-area-inset-top)}
+h1,h2,h3{margin:0}button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;background:var(--pri);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.top button{background:#ffffff26;border:0;color:#fff;border-radius:99px;padding:6px 12px;font-size:12px}
+main{max-width:860px;margin:auto;padding:14px 14px calc(90px + env(safe-area-inset-bottom))}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--ln);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;border:0;background:none;padding:8px 2px;font-size:11px;color:var(--mut)}nav button i{display:block;font-style:normal;font-size:20px}
+nav button.on{color:var(--pri);font-weight:700}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:14px}
+.card h2{font-size:16px;margin-bottom:10px}
+.row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}.row>*{flex:none}
+.chip{border:1px solid var(--ln);background:var(--card);border-radius:99px;padding:6px 13px;font-size:13px;color:var(--mut)}
+.chip.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:12px;padding:11px 16px;font-weight:600;width:100%}
+.btn.sm{width:auto;padding:7px 12px;font-size:13px}.btn.red{background:var(--badb)}
+input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--ln);border-radius:12px;background:var(--card);color:var(--tx)}
+.g{display:grid;gap:8px}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
+.tile{border:2px solid;border-radius:12px;padding:8px;text-align:left;min-height:62px;font-size:12px;font-weight:700}
+.tile small{display:block;font-weight:400;opacity:.8;margin-top:2px}
+.free{background:var(--ok);border-color:var(--okb);color:var(--tx)}.busy{background:var(--bad);border-color:var(--badb);color:var(--tx)}.small{background:var(--dim);border-color:var(--ln);color:var(--mut)}
+.mut{color:var(--mut);font-size:13px}.fl{font-size:12px;color:var(--mut);margin:10px 0 6px}
+.item{border:1px solid var(--ln);border-left:4px solid var(--pri);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:var(--card)}
+.item.exam{border-left-color:#d24b4b}.item.practical{border-left-color:#8b5cf6}.item.event{border-left-color:#e0a21a}
+.item .h{display:flex;justify-content:space-between;gap:8px}.link{background:none;border:0;color:var(--pri);font-size:13px;padding:0}
+.tag{font-size:10px;background:#f6d98b;color:#5b4300;border-radius:5px;padding:1px 6px}
+.bar{height:9px;border-radius:9px;background:var(--pri)}.bw{flex:1;background:var(--dim);border-radius:9px}
+.sheet{position:fixed;inset:0;background:#0008;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet>div{background:var(--card);width:100%;max-width:460px;border-radius:22px 22px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+@media(min-width:700px){.sheet{align-items:center}.sheet>div{border-radius:22px}}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#111a33;color:#fff;padding:10px 16px;border-radius:99px;z-index:30;max-width:90vw;font-size:14px;text-align:center}
+.login{min-height:100vh;background:var(--pri);display:flex;flex-direction:column;justify-content:center;padding:20px}
+.login .hero{color:#fff;text-align:center;margin-bottom:20px}.login .hero h1{font-size:30px}.login form{max-width:420px;width:100%;margin:auto}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.roles button{border:1px solid var(--ln);background:var(--card);border-radius:12px;padding:10px;font-size:13px;text-transform:capitalize}.roles button.on{background:var(--pri);color:#fff}
+.msg{padding:9px 12px;border-radius:14px;margin-bottom:6px;max-width:85%;white-space:pre-line;font-size:14px;background:var(--card);border:1px solid var(--ln);width:fit-content}.msg.me{background:var(--pri);color:#fff;margin-left:auto;border:0}
+.stat{background:var(--dim);border-radius:12px;padding:10px;text-align:center}.stat b{font-size:20px;display:block}
+.empty{text-align:center;color:var(--mut);padding:24px 0}
+.hero2{background:linear-gradient(135deg,var(--pri),#2a6bdc);color:#fff;border-radius:20px;padding:18px;margin-bottom:14px}
+.hero2 h2{margin:2px 0}.hero2 p{margin:0;color:#d6e4ff;font-size:13px}
+.sheet>div::before{content:'';display:block;width:40px;height:4px;border-radius:4px;background:var(--ln);margin:-6px auto 12px}
+button:active{transform:scale(.97)}:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.tile{min-height:70px;border-radius:14px}.btn,.chip{min-height:40px}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qa button{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:16px 8px;font-weight:600;font-size:14px}
+
+/* Responsive layout improvements: phones, tablets and desktop */
+html{width:100%;min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{width:100%;min-width:320px;min-height:100dvh;overflow-x:hidden;}
+#app{width:100%;min-height:100dvh;}
+main{width:100%;min-width:0;}
+.top{gap:10px;min-height:54px;}
+.top>b{min-width:0;overflow-wrap:anywhere;}
+.top button{max-width:58%;white-space:normal;overflow-wrap:anywhere;}
+.card,.item,.hero2{min-width:0;overflow-wrap:anywhere;}
+.row{max-width:100%;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+.g>*{min-width:0;}
+input,select,textarea,button{max-width:100%;}
+input,select,textarea{min-height:44px;font-size:16px;}
+button{touch-action:manipulation;}
+nav{width:100%;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
+nav button{min-width:0;overflow:hidden;white-space:normal;line-height:1.2;}
+nav button i{line-height:1.35;}
+.sheet{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
+.sheet>div{max-height:92dvh;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.login{min-height:100dvh;min-height:100vh;padding:clamp(16px,4vw,28px);}
+.login form{min-width:0;}
+@media(max-width:600px){
+  main{padding:12px 10px calc(82px + env(safe-area-inset-bottom));}
+  .top{padding:10px 12px;}
+  .top button{font-size:11px;padding:7px 9px;}
+  .card{padding:12px;border-radius:14px;margin-bottom:10px;}
+  .g2{grid-template-columns:minmax(0,1fr)!important;}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .qa{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .roles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+  .roles button{padding:10px 5px;font-size:12px;min-width:0;}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .item .h{flex-wrap:wrap;}
+  nav button{font-size:10px;padding:7px 1px;}
+  nav button i{font-size:18px;}
+  .sheet{align-items:flex-end;}
+  .sheet>div{width:100%;border-radius:20px 20px 0 0;padding:16px 14px calc(20px + env(safe-area-inset-bottom));}
+  .msg{max-width:92%;}
+}
+@media(min-width:601px) and (max-width:900px){
+  main{max-width:760px;padding-left:16px;padding-right:16px;}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(min-width:900px){
+  main{max-width:1040px;padding:20px 22px 100px;}
+  .card{padding:18px;}
+}
+@media(max-width:360px){
+  nav button{font-size:9px;}
+  nav button i{font-size:17px;}
+  .tiles{grid-template-columns:1fr 1fr;}
+  .hero2{padding:14px;}
+}
+
+</style></head><body><div id="app"></div>
+<script>
+/* ============ DATA STORE (acts as the backend; every rule is enforced here, not in the UI) ============ */
+const K='campus-connect-v2',H=36e5,DAY=864e5;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>new Date(t).toLocaleString([],{dateStyle:'medium',timeStyle:'short'});
+const tm=t=>new Date(t).toLocaleTimeString([],{timeStyle:'short'});
+const FL=['Ground floor','First floor','Second floor'];
+function seed(){
+  const R=[];let n=0;const add=(code,b,f,k,c)=>R.push({id:++n,code,b,f,k,c,on:true});
+  add('Library','IET',0,'library',180);
+  [['IET14 (CSE Lab)'],['IET15 (ME Lab)'],['IET16 (ECE Lab)'],['IET22 (IT Lab)']].forEach(x=>add(x[0],'IET',1,'lab',60));
+  ['IET17','IET18','IET19','IET20'].forEach(c=>add(c,'IET',1,'classroom',75));
+  add('IET32 Seminar Hall','IET',2,'seminar',200);
+  ['IET23','IET24','IET25','IET28','IET29','IET30'].forEach(c=>add(c,'IET',2,'classroom',75));
+  for(let i=1;i<=14;i++)add('LH'+String(i).padStart(2,'0'),'Deeksha Bhawan',i<=7?0:1,'classroom',[1,2,8,9].includes(i)?100:60);
+  const d0=new Date().setHours(0,0,0,0),rid=c=>R.find(r=>r.code.startsWith(c)).id;
+  const B=[[ 'IET17','TEST: DSA Lecture','lecture','CSE',d0+10*H,d0+11*H],['IET14','TEST: DBMS Practical','practical','CSE',d0+14*H,d0+16*H],
+   ['LH01','TEST: Minor Exam (NSS)','exam','All branches, Year 1',d0+DAY+11*H,d0+DAY+12.5*H],['IET32','TEST: Tech Talk','event','All',d0+DAY+14*H,d0+DAY+16*H]]
+   .map((x,i)=>({id:i+1,room:rid(x[0]),title:x[1],type:x[2],aud:x[3],br:/^(CSE|ECE|IT|ME|AIML|AIDS)/.exec(x[3])?.[1]||'',yr:/Year (\d)/.test(x[3])?+RegExp.$1:0,sec:'',start:x[4],end:x[5],by:'u2',status:'confirmed',test:true}));
+  return{seq:B.length,rooms:R,bookings:B,hist:[],reports:[],notes:[],
+   users:[{id:'u1',name:'Admin (Registrar)',role:'admin',un:'admin',pw:'admin123'},{id:'u2',name:'Dr. Sharma',role:'faculty',un:'sharma',pw:'faculty123'},{id:'u3',name:'Prof. Verma',role:'faculty',un:'verma',pw:'faculty123'},
+    {id:'u4',name:'Aman Singh',role:'student',branch:'CSE',yr:2,sec:'A',un:'aman',pw:'student123'},{id:'u5',name:'Riya Sen',role:'student',branch:'ECE',yr:3,sec:'',un:'riya',pw:'student123'},{id:'u6',name:'Kunal Rao',role:'student',branch:'IT',yr:1,sec:'',un:'kunal',pw:'student123'}],
+   anns:[{id:1,title:'TEST: Welcome to Campus Connect',body:'Sample notice. Minor exam rooms are listed under Timetable.',kind:'notice',t:Date.now()}]}}
+let D;try{D=JSON.parse(localStorage.getItem(K))}catch(e){}D=D||seed();
+/* OPTIONAL SHARED MODE: paste your Supabase project URL + anon key (see supabase.sql) so every phone sees the same bookings */
+const CFG={url:'',key:''},cloud=!!(CFG.url&&CFG.key),HD={apikey:CFG.key,Authorization:'Bearer '+CFG.key,'Content-Type':'application/json'};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){};if(cloud)push()};
+async function push(){try{await fetch(CFG.url+'/rest/v1/kv',{method:'POST',headers:{...HD,Prefer:'resolution=merge-duplicates'},body:JSON.stringify({id:'main',data:D})})}catch(e){}}
+async function pull(){try{const r=await fetch(CFG.url+'/rest/v1/kv?id=eq.main&select=data',{headers:HD}).then(x=>x.json());
+ if(!r[0])return push();const j=JSON.stringify(r[0].data);if(j==JSON.stringify(D))return;D=r[0].data;try{localStorage.setItem(K,j)}catch(e){}
+ if(!S.sheet&&!document.querySelector('input:focus,textarea:focus,select:focus'))render()}catch(e){}}
+const room=id=>D.rooms.find(r=>r.id==id);
+const log=(id,a,d)=>D.hist.unshift({t:Date.now(),id,a,d,by:S.user?.name});
+const clash=(rid,s,e,skip)=>D.bookings.find(x=>x.room==rid&&x.status=='confirmed'&&x.start<e&&x.end>s&&x.id!=skip);
+function book(u,b){ // server-side style validation
+  if(!u||u.role=='student')return{err:'Only faculty/admin can book rooms.'};
+  if(!b.title.trim())return{err:'Enter a title.'};
+  if(!(b.end>b.start))return{err:'Invalid time range.'};
+  const r=room(b.room);if(!r||!r.on)return{err:'Room not available.'};
+  const c=clash(b.room,b.start,b.end);
+  if(c)return{err:`Conflict: ${r.code} is booked for "${c.title}" (${fmt(c.start)}–${tm(c.end)}).`};
+  const x={...b,id:++D.seq,by:u.id,status:'confirmed'};D.bookings.push(x);log(x.id,'created',x.title);notify(x,`New ${x.type}: ${x.title} · ${r.code} · ${fmt(x.start)}`);save();return{ok:x}}
+function cancel(u,id){const b=D.bookings.find(x=>x.id==id);if(!b||!(u.role=='admin'||b.by==u.id))return{err:'Not allowed.'};b.status='cancelled';log(id,'cancelled',b.title);notify(b,`Cancelled: ${b.title} (${room(b.room).code}, ${fmt(b.start)})`);save();return{ok:1}}
+const match=(b,u)=>(!b.br||b.br==u.branch)&&(!b.yr||b.yr==u.yr)&&(!b.sec||b.sec==u.sec);
+const notify=(b,t)=>D.users.filter(u=>u.role=='student'&&match(b,u)).forEach(u=>D.notes.unshift({uid:u.id,text:t,t:Date.now(),read:false}));
+const unread=()=>D.notes.filter(n=>n.uid==S.user?.id&&!n.read).length;
+function resched(u,id,s,e){const b=D.bookings.find(x=>x.id==id);if(!b||!(u.role=='admin'||b.by==u.id))return{err:'Not allowed.'};
+ if(!(e>s))return{err:'Invalid time range.'};const c=clash(b.room,s,e,id);if(c)return{err:`Conflict with "${c.title}" (${fmt(c.start)}–${tm(c.end)}).`};
+ b.start=s;b.end=e;log(id,'rescheduled',b.title);notify(b,`Rescheduled: ${b.title} → ${fmt(s)}, ${room(b.room).code}`);save();return{ok:1}}
+const alts=(r,q,s,e)=>D.rooms.filter(x=>x.on&&x.id!=r.id&&x.c>=q&&!clash(x.id,s,e)).sort((a,b)=>(a.b==r.b?0:1)-(b.b==r.b?0:1)||a.c-b.c).slice(0,3);
+
+/* ============ UI STATE ============ */
+const iso=d=>new Date(d-new Date(d).getTimezoneOffset()*6e4).toISOString().slice(0,10);
+let S={user:null,lrole:'student',tab:'',sub:'analytics',sheet:null,toast:'',chat:[{me:0,t:'Hi! Ask about free rooms, exams, capacity or announcements.'}],filter:'all',
+ q:{b:'',fl:'',date:iso(Date.now()),time:'10:00',dur:60,cap:30}};
+const say=m=>{S.toast=m;render();clearTimeout(say.t);say.t=setTimeout(()=>{S.toast='';document.querySelector('.toast')?.remove()},3200)};
+const chip=(on,a,k,v,l)=>`<button class="chip ${on?'on':''}" data-a="${a}" data-k="${k}" data-v="${v}">${l}</button>`;
+const empty=(i,t)=>`<div class="empty"><div style="font-size:30px">${i}</div>${t}</div>`;
+const win=()=>{const s=new Date(S.q.date+'T'+S.q.time).getTime();return[s,s+S.q.dur*6e4]};
+
+/* ============ VIEWS ============ */
+function vLogin(){const us=D.users.filter(u=>u.role==S.lrole);
+ return`<div class="login"><div class="hero"><div style="font-size:48px">🏛️</div><h1>Campus Connect</h1><p>DDUGU · Find rooms. Never miss a class or exam.</p></div>
+ <form class="card g" data-form="login"><div class="roles">${[['student','🎓'],['faculty','👩‍🏫'],['admin','🛠️']].map(([r,i])=>`<button type="button" class="${S.lrole==r?'on':''}" data-a="lrole" data-v="${r}">${i}<br>${r}</button>`).join('')}</div>
+ <label class="mut">Demo account</label><select name="uid">${us.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('')}</select>
+ <button class="btn">Log in as ${S.lrole}</button><p class="mut" style="margin:0">Demo mode: pick an account. Data is saved in this browser.</p></form></div>`}
+
+const PLAN={IET:[['Ground floor',[['Library',"Teachers' Office"],['Placement Cell','Director Office']]],['First floor',[['IET22','IET16','IET14','IET15'],['IET20','IET19','IET18','IET17']]],['Second floor',[['IET32','IET24','IET25'],['IET30','IET29','IET28','IET23']]]],'Deeksha Bhawan':[['Ground floor',[['LH01'],['LH02'],['LH03','LH04','LH05'],['LH06','LH07']]],['First floor',[['LH08'],['LH09'],['LH10','LH11','LH12'],['LH13','LH14']]]]};
+function vPlan(ok,st){return Object.entries(PLAN).filter(([b])=>!S.q.b||S.q.b==b).map(([b,fls])=>`<div class="card"><h2>${b} floor plan</h2>`+fls.map(([fn,rows])=>`<div class="fl">${fn}</div>`+rows.map(row=>`<div style="display:flex;gap:6px;margin-bottom:6px">${row.map(c=>{const r=D.rooms.find(x=>x.b==b&&x.code.startsWith(c));return r?`<button class="tile ${ok?st(r):'small'}" style="flex:1" data-a="tile" data-v="${r.id}">${esc(r.code)}<small>👥 ${r.c}</small></button>`:`<div class="tile small" style="flex:1">${c}<small>not bookable</small></div>`}).join('')}</div>`).join('')).join('')+'</div>').join('')}
+function vBook(){const q=S.q,[s,e]=win(),ok=!isNaN(s);
+ const st=r=>r.c<q.cap?'small':clash(r.id,s,e)?'busy':'free';
+ const act=D.rooms.filter(r=>r.on&&(!q.b||r.b==q.b)&&(q.fl===''||r.f==q.fl));
+ const nf=act.filter(r=>ok&&st(r)=='free').length;
+ return`<div class="card"><div class="row">${['','IET','Deeksha Bhawan'].map(b=>chip(q.b===b,'q','b',b,b||'All buildings')).join('')}${['','0','1','2'].map(f=>chip(q.fl===f,'q','fl',f,f===''?'All floors':FL[f])).join('')}</div>
+ <div class="row">${chip(q.date==iso(Date.now()),'q','date',iso(Date.now()),'Today')}${chip(q.date==iso(Date.now()+DAY),'q','date',iso(Date.now()+DAY),'Tomorrow')}</div>
+ <div class="g g4"><input type="date" data-f="date" value="${q.date}"><input type="time" data-f="time" value="${q.time}">
+ <select data-f="dur">${[30,60,90,120,180].map(m=>`<option value="${m}" ${q.dur==m?'selected':''}>${m} min</option>`).join('')}</select>
+ <input type="number" min="1" data-f="cap" value="${q.cap}" placeholder="Students"></div>
+ <p class="mut">${ok?`<b style="color:var(--okb)">${nf} free</b> · ${fmt(s)} – ${tm(e)}`:'Pick a date and time'} &nbsp; 🟩 free 🟥 occupied ⬜ too small</p><div class="row">${chip(S.view!='plan','view','k','list','▦ Rooms')}${chip(S.view=='plan','view','k','plan','🗺️ Floor plan')}</div></div>`+
+ (S.view=='plan'?vPlan(ok,st):'')+['IET','Deeksha Bhawan'].filter(b=>S.view!='plan'&&(!q.b||q.b==b)).map(b=>`<div class="card"><h2>${b=='IET'?'Institute of Engineering &amp; Technology (IET)':'Deeksha Bhawan (≈100 m from IET)'}</h2>`+
+  [0,1,2].map(f=>{const rs=act.filter(r=>r.b==b&&r.f==f);return rs.length?`<div class="fl">${FL[f]}</div><div class="tiles">${rs.map(r=>`<button class="tile ${ok?st(r):'small'}" data-a="tile" data-v="${r.id}">${esc(r.code)}<small>👥 ${r.c}</small></button>`).join('')}</div>`:''}).join('')+`</div>`).join('')}
+
+function vBookings(all){const l=D.bookings.filter(b=>all||b.by==S.user.id).sort((a,b)=>b.start-a.start);
+ return l.map(b=>`<div class="item ${b.type}"><div class="h"><div style="${b.status=='cancelled'?'opacity:.5':''}"><b>${esc(b.title)}</b> ${b.test?'<span class="tag">TEST</span>':''}<div class="mut">${esc(room(b.room).code)} · ${room(b.room).b} · ${b.type}<br>${fmt(b.start)} – ${tm(b.end)}</div></div>
+ ${b.status=='confirmed'?`<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><button class="link" data-a="resch" data-v="${b.id}">Reschedule</button><button class="link" style="color:var(--badb)" data-a="cancel" data-v="${b.id}">${S.cf==b.id?'Tap again to confirm':'Cancel'}</button></div>`:'<span class="mut">cancelled</span>'}</div></div>`).join('')||empty('📭','No bookings yet. Use Book.')}
+
+function vSched(){const u=S.user,now=Date.now();
+ const l=D.bookings.filter(b=>b.status=='confirmed'&&b.end>now&&(S.filter=='all'||b.type==S.filter)&&match(b,u)).sort((a,b)=>a.start-b.start);
+ const days={};l.forEach(b=>(days[new Date(b.start).toDateString()]??=[]).push(b));
+ return`<div class="row" style="margin-bottom:10px">${[['all','All'],['exam','Exams'],['lecture','Lectures'],['practical','Practicals'],['event','Events']].map(([k,t])=>chip(S.filter==k,'filter','k',k,t)).join('')}</div>`+
+ Object.entries(days).map(([d,bs])=>`<p class="mut" style="font-weight:600">${new Date(d).toLocaleDateString([],{weekday:'long',day:'numeric',month:'short'})}</p>`+bs.map(b=>`<div class="item ${b.type}"><div class="h"><div><b>${esc(b.title)}</b><div class="mut">🕒 ${tm(b.start)} – ${tm(b.end)} · 📍 ${esc(room(b.room).code)}, ${room(b.room).b}<br>${esc(b.aud||'')}</div></div><button class="link" data-a="report" data-v="${b.id}">⚠ Report</button></div></div>`).join('')).join('')||empty('🎉','Nothing scheduled.')}
+
+function vLogin2(){
+ const su=S.su, role=S.signupRole||'student';
+ const roleButtons=(signup)=>[['student','🎓'],['faculty','👩‍🏫'],['admin','🛠️']].map(([r,i])=>
+  `<button type="button" class="${(signup?role:S.lrole)==r?'on':''}" data-a="${signup?'signupRole':'lrole'}" data-v="${r}">${i}<br>${r}</button>`).join('');
+ return`<div class="login"><div class="hero"><div style="font-size:48px">🏛️</div><h1>Campus Connect</h1><p>DDUGU · Find rooms. Never miss a class or exam.</p></div>
+ <form class="card g" data-form="${su?'signup':'login'}">
+ ${su?`<h2>Create a ${role} account</h2><div class="roles">${roleButtons(true)}</div>
+ <input name="name" placeholder="Full name" required>
+ ${role=='student'?`<div class="g g4"><select name="br">${['CSE','AIML','AIDS','ECE','ME','IT'].map(x=>`<option>${x}</option>`).join('')}</select><select name="yr">${[1,2,3,4].map(x=>`<option value="${x}">Year ${x}</option>`).join('')}</select><select name="sec"><option value="">No section</option><option>A</option><option>B</option></select></div>`:''}
+ ${role=='faculty'?`<input name="department" placeholder="Department (e.g. CSE)" required>`:''}
+ ${role=='admin'?`<input name="invite" type="password" placeholder="Admin invitation code" required><p class="mut">Admin registration is restricted to authorized invitation codes.</p>`:''}
+ <input name="un" placeholder="Username" autocomplete="username" required>
+ <input name="pw" type="password" placeholder="Create password" autocomplete="new-password" required>
+ <button class="btn">Create ${role} account</button>
+ <button type="button" class="link" data-a="su">Back to log in</button>`
+ :`<div class="roles">${roleButtons(false)}</div>
+ <label class="mut">Demo account</label><select name="uid">${D.users.filter(u=>u.role==S.lrole).map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('')}</select>
+ <input name="un" placeholder="Username" autocomplete="username" required>
+ <input name="pw" type="password" placeholder="Password" autocomplete="current-password" required>
+ <button class="btn">Log in as ${S.lrole}</button>
+ <button type="button" class="link" data-a="su">Create a new ${S.lrole} account</button>
+ <p class="mut" style="margin:0">Demo logins: admin / admin123 · sharma / faculty123 · aman / student123</p>`}
+ </form></div>`}
+
+function vHome(){const u=S.user,now=Date.now(),st=u.role=='student',up=D.bookings.filter(b=>b.status=='confirmed'&&b.end>now).sort((a,b)=>a.start-b.start);
+ const mine=st?up.filter(b=>match(b,u)):up.filter(b=>b.by==u.id),nf=D.rooms.filter(r=>r.on&&!clash(r.id,now,now+H)).length,nx=mine[0],ex=up.find(b=>b.type=='exam'&&(!st||match(b,u)));
+ const hr=new Date().getHours(),g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',card=(t,b)=>`<div class="card"><h2>${t}</h2><div class="item ${b.type}"><b>${esc(b.title)}</b><div class="mut">🕒 ${fmt(b.start)} · 📍 ${esc(room(b.room).code)}, ${room(b.room).b}</div></div></div>`;
+ const qa=st?[['schedule','📅 Timetable'],['chat','💬 Ask assistant']]:[['book','🔍 Find a room'],['ann','📢 Publish updates']];
+ return`<div class="hero2"><p>${g}</p><h2 style="font-size:24px">${esc(st?u.name.split(' ')[0]:u.name)} 👋</h2><p>${st?[u.branch,u.yr?'Year '+u.yr:'',u.sec?'Section '+u.sec:''].filter(Boolean).join(' · '):u.role+' · DDUGU'}</p></div>
+ <div class="g" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px"><div class="stat"><b>${nf}</b>rooms free now</div><div class="stat"><b>${mine.length}</b>${st?'upcoming':'my bookings'}</div><div class="stat"><b>${unread()}</b>new alerts</div></div>
+ ${nx?card('Next up',nx):''}${ex&&ex!==nx?card('Next exam',ex):''}${!nx&&!ex?empty('🎉','Nothing coming up.'):''}
+ <div class="qa">${qa.map(([k,l])=>`<button data-a="tab" data-v="${k}">${l}</button>`).join('')}</div>`}
+const KI={notice:'📢',exam:'📝',cancellation:'🚫',reschedule:'🔁'};
+function vAnn(){const my=D.notes.filter(n=>n.uid==S.user.id),nt=my.length?`<div class="card"><h2>🔔 Your notifications</h2>${my.slice(0,8).map(n=>`<p style="margin:0 0 6px;${n.read?'':'font-weight:600'}">${esc(n.text)} <span class="mut">${fmt(n.t)}</span></p>`).join('')}</div>`:'';return nt+(S.user.role!='student'?`<button class="btn" style="margin-bottom:14px" data-a="annform">+ Publish update</button>`:'')+
+ D.anns.map(a=>`<div class="card"><div class="h" style="display:flex;justify-content:space-between"><b>${KI[a.kind]} ${esc(a.title)}</b>${S.user.role=='admin'?`<button class="link" style="color:var(--badb)" data-a="delann" data-v="${a.id}">Delete</button>`:''}</div><p style="margin:6px 0">${esc(a.body)}</p><span class="mut">${fmt(a.t)}</span></div>`).join('')||empty('🔔','No announcements.')}
+
+function vAdmin(){const s=S.sub,tot=D.bookings.filter(b=>b.status=='confirmed');
+ const st=D.rooms.map(r=>({c:r.code,h:tot.filter(b=>b.room==r.id).reduce((a,b)=>a+(b.end-b.start)/H,0)})).sort((a,b)=>b.h-a.h),mx=Math.max(1,...st.map(x=>x.h));
+ let body='';
+ if(s=='analytics')body=`<div class="card"><h2>Room utilization</h2><div class="g g4" style="margin-bottom:12px"><div class="stat"><b>${tot.length}</b>Active</div><div class="stat"><b>${D.rooms.length}</b>Rooms</div><div class="stat"><b>${D.bookings.length-tot.length}</b>Cancelled</div></div>${st.map(x=>`<div style="display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:5px"><span style="width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.c)}</span><div class="bw"><div class="bar" style="width:${x.h/mx*100}%"></div></div><span style="width:40px;text-align:right">${x.h.toFixed(1)}h</span></div>`).join('')}</div>`;
+ if(s=='users')body=`<div class="card"><h2>Users</h2>${D.users.map(u=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--ln)"><span>${esc(u.name)} <span class="mut">${u.role=='student'?[u.branch,u.yr?'Y'+u.yr:'',u.sec].filter(Boolean).join(' '):''}</span></span><select style="width:auto" data-c="role" data-id="${u.id}">${['student','faculty','admin'].map(r=>`<option ${u.role==r?'selected':''}>${r}</option>`).join('')}</select></div>`).join('')}
+ <form class="g g2" style="margin-top:12px" data-form="user"><input name="name" placeholder="Name" required><input name="branch" placeholder="Branch (students)"><select name="role"><option>student</option><option>faculty</option><option>admin</option></select><button class="btn">Add user</button></form><h2 style="margin-top:16px">Import students (CSV)</h2><form class="g" data-form="csv"><textarea name="csv" rows="4" placeholder="name,username,branch,year,section&#10;Riya Sen,riya2,CSE,2,A"></textarea><button class="btn">Import</button></form></div>`;
+ if(s=='rooms')body=`<div class="card"><h2>Rooms</h2><form class="g g2" data-form="room" style="margin-bottom:12px"><input name="code" placeholder="Code" required><select name="b"><option>IET</option><option>Deeksha Bhawan</option></select><select name="f"><option value="0">Ground</option><option value="1">First</option><option value="2">Second</option></select><input name="c" type="number" value="60" min="1"><button class="btn" style="grid-column:1/-1">Add room</button></form>
+ ${D.rooms.map(r=>`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln)"><span>${esc(r.code)} <span class="mut">· ${r.b}</span></span><span style="display:flex;gap:8px;align-items:center"><input style="width:70px" type="number" data-c="cap" data-id="${r.id}" value="${r.c}"><label class="mut"><input type="checkbox" style="width:auto" data-c="on" data-id="${r.id}" ${r.on?'checked':''}> on</label></span></div>`).join('')}</div>`;
+ if(s=='reports')body=`<div class="card"><h2>Student reports</h2>${D.reports.map(r=>`<p style="border-bottom:1px solid var(--ln);padding-bottom:6px"><b>${esc(r.who)}</b>: ${esc(r.msg)}<br><span class="mut">${esc(r.bt)} · ${fmt(r.t)}</span></p>`).join('')||empty('✅','No reports.')}</div>`;
+ if(s=='history')body=`<div class="card"><h2>Audit log</h2>${D.hist.map(h=>`<p class="mut" style="margin:0 0 6px">${fmt(h.t)} · #${h.id} · <b>${h.a}</b> · ${esc(h.d)} · ${esc(h.by||'')}</p>`).join('')||empty('🗂️','No history yet.')}</div>`;
+ return`<div class="row" style="margin-bottom:10px">${['analytics','users','rooms','reports','history'].map(k=>chip(s==k,'sub','k',k,k[0].toUpperCase()+k.slice(1))).join('')}</div>`+body}
+
+function answer(t){const s=t.toLowerCase(),now=Date.now(),code=D.rooms.find(r=>s.replace(/\s/g,'').includes(r.code.split(' ')[0].toLowerCase()));
+ if(code&&/capacity|seat/.test(s))return`${code.code} (${code.b}, ${FL[code.f]}) seats ${code.c}.`;
+ if(code){const b=D.bookings.filter(x=>x.room==code.id&&x.status=='confirmed'&&x.end>now).sort((a,b)=>a.start-b.start).slice(0,4);return b.length?`${code.code} upcoming:\n`+b.map(x=>`• ${x.title} (${fmt(x.start)})`).join('\n'):`${code.code} has no upcoming bookings. It is free.`}
+ const n=/(\d+)\s*(students|seats|people)/.exec(s);if(n){const f=D.rooms.filter(r=>r.on&&r.c>=+n[1]&&!clash(r.id,now,now+H)).sort((a,b)=>a.c-b.c).slice(0,5);return f.length?`Free now for ${n[1]} students:\n`+f.map(r=>`• ${r.code} (${r.b}, ${r.c} seats)`).join('\n'):'No free room fits that many students right now.'}
+ if(/my (schedule|timetable|class)/.test(s)&&S.user.role=='student'){const x=D.bookings.filter(b=>b.status=='confirmed'&&b.end>now&&match(b,S.user)).sort((a,b)=>a.start-b.start).slice(0,5);return x.length?x.map(b=>`• ${b.title}: ${room(b.room).code}, ${fmt(b.start)}`).join('\n'):'Nothing scheduled for you.'}
+ if(/free|vacant|available/.test(s)){const f=D.rooms.filter(r=>r.on&&!clash(r.id,now,now+H)).map(r=>r.code);return f.length?'Free for the next hour:\n'+f.join(', '):'No rooms are free right now.'}
+ if(/exam/.test(s)){const x=D.bookings.filter(b=>b.type=='exam'&&b.status=='confirmed'&&b.end>now);return x.length?x.map(b=>`• ${b.title}: ${room(b.room).code}, ${fmt(b.start)}`).join('\n'):'No upcoming exams.'}
+ if(/announce|notice|news|update/.test(s))return D.anns.slice(0,3).map(a=>'• '+a.title).join('\n')||'No announcements.';
+ return'I can answer about room availability, capacity, exams and announcements.'}
+const vChat=()=>`<div class="g" style="grid-template-rows:1fr auto auto;height:calc(100vh - 170px)"><div id="chat" style="overflow:auto">${S.chat.map(m=>`<div class="msg ${m.me?'me':''}">${esc(m.t)}</div>`).join('')}</div>
+ <div class="row">${['Free rooms now','Upcoming exams','Latest announcements'].map(c=>`<button class="chip" data-a="ask" data-v="${c}">${c}</button>`).join('')}</div>
+ <form class="g" style="grid-template-columns:1fr auto" data-form="chat"><input name="t" placeholder="Ask e.g. is IET17 free?" autocomplete="off"><button class="btn sm">Send</button></form></div>`;
+
+function vSheet(){const x=S.sheet;if(!x)return'';let h='';const[s,e]=win();
+ if(x.t=='book'){const r=room(x.id);h=`<h3>Book ${esc(r.code)}</h3><p class="mut">${r.b} · ${FL[r.f]} · ${fmt(s)} – ${tm(e)}</p><form class="g" data-form="book"><input name="title" placeholder="Title (e.g. Extra DSA class)" required><select name="type"><option value="lecture">Extra lecture</option><option value="exam">Minor exam</option><option value="practical">Practical</option><option value="event">Event</option></select><div class="g g4"><select name="br"><option value="">All branches</option>${['CSE','AIML','AIDS','ECE','ME','IT'].map(x=>`<option>${x}</option>`).join('')}</select><select name="yr"><option value="0">All years</option>${[1,2,3,4].map(x=>`<option value="${x}">Year ${x}</option>`).join('')}</select><select name="sec"><option value="">All sections</option><option>A</option><option>B</option></select></div><button class="btn">Confirm booking</button></form>`}
+ if(x.t=='busy'){const r=room(x.id),c=clash(r.id,s,e),a=alts(r,S.q.cap,s,e);h=`<h3>${esc(r.code)} is occupied</h3><p>Booked for <b>${esc(c?.title)}</b> until ${c?tm(c.end):''}.</p><p class="mut">Suggested alternatives (checked against live bookings)</p>`+(a.map(y=>`<div class="item" style="display:flex;justify-content:space-between;align-items:center"><span><b>${esc(y.code)}</b><div class="mut">${y.b} · ${y.c} seats</div></span><button class="btn sm" data-a="tile" data-v="${y.id}">Book</button></div>`).join('')||empty('😕','No free room fits. Try another time.'))}
+ if(x.t=='report'){const b=D.bookings.find(y=>y.id==x.id);h=`<h3>Report an issue</h3><p class="mut">${esc(b.title)} · ${esc(room(b.room).code)}</p><form class="g" data-form="report"><textarea name="msg" rows="4" placeholder="What looks wrong or outdated?" required></textarea><button class="btn">Send report</button></form>`}
+ if(x.t=='resch'){const b=D.bookings.find(y=>y.id==x.id);h=`<h3>Reschedule</h3><p class="mut">${esc(b.title)} · ${esc(room(b.room).code)}</p><form class="g" data-form="resch"><input type="date" name="date" value="${iso(b.start)}"><input type="time" name="time" value="${new Date(b.start).toTimeString().slice(0,5)}"><select name="dur">${[30,60,90,120,180].map(m=>`<option value="${m}" ${(b.end-b.start)/6e4==m?'selected':''}>${m} min</option>`).join('')}</select><button class="btn">Save new time</button></form>`}
+ if(x.t=='ann')h=`<h3>Publish update</h3><form class="g" data-form="ann"><input name="title" placeholder="Title" required><textarea name="body" rows="3" placeholder="Details"></textarea><select name="kind"><option value="notice">Notice</option><option value="exam">Exam notice</option><option value="cancellation">Cancellation</option><option value="reschedule">Rescheduling</option></select><button class="btn">Publish</button></form>`;
+ return`<div class="sheet" data-a="closesheet"><div>${h}</div></div>`}
+
+function render(){const A=document.getElementById('app');
+ if(!S.user){A.innerHTML=vLogin2()+(S.toast?`<div class="toast">${esc(S.toast)}</div>`:'');return}
+ const T={student:[['home','🏠','Home'],['schedule','📅','Timetable'],['ann','🔔','Updates'],['chat','💬','Assistant']],faculty:[['home','🏠','Home'],['book','🔍','Book'],['mine','📋','Mine'],['ann','🔔','Updates'],['chat','💬','Assistant']],admin:[['home','🏠','Home'],['book','🔍','Book'],['all','📋','Bookings'],['admin','⚙️','Admin'],['ann','🔔','Updates'],['chat','💬','Assistant']]}[S.user.role];
+ if(!S.tab)S.tab=T[0][0];
+ const V={home:vHome,book:vBook,mine:()=>vBookings(0),all:()=>vBookings(1),schedule:vSched,ann:vAnn,admin:vAdmin,chat:vChat}[S.tab]();
+ A.innerHTML=`<div class="top"><b>${T.find(t=>t[0]==S.tab)[2]}</b><button data-a="logout">${esc(S.user.name)} · Log out</button></div><main>${V}</main>
+ <nav>${T.map(t=>`<button class="${S.tab==t[0]?'on':''}" data-a="tab" data-v="${t[0]}"><i>${t[1]}${t[0]=='ann'&&unread()?` <span class="tag">${unread()}</span>`:''}</i>${t[2]}</button>`).join('')}</nav>${vSheet()}${S.toast?`<div class="toast">${esc(S.toast)}</div>`:''}`;
+ const c=document.getElementById('chat');if(c)c.scrollTop=c.scrollHeight}
+
+/* ============ EVENTS ============ */
+const ACT={
+ lrole:d=>{S.lrole=d.v;render()},signupRole:d=>{S.signupRole=d.v;render()},su:()=>{S.su=!S.su;S.signupRole=S.lrole||'student';render()},view:d=>{S.view=d.v;render()},resch:d=>{S.sheet={t:'resch',id:+d.v};render()},tab:d=>{S.tab=d.v;S.sheet=null;render();if(d.v=='ann'&&S.user.role=='student')setTimeout(()=>{if(S.tab!='ann'||S.user?.role!='student'||S.sheet)return;D.notes.forEach(n=>n.uid==S.user.id&&(n.read=true));save();render()},2500)},sub:d=>{S.sub=d.v;render()},filter:d=>{S.filter=d.v;render()},
+ q:d=>{S.q[d.k]=d.v;render()},logout:()=>{S.user=null;S.tab='';render()},
+ tile:d=>{const r=room(d.v),[s,e]=win();if(isNaN(s))return say('Pick a date and time first.');
+  if(r.c<S.q.cap)return say(`${r.code} seats only ${r.c}.`);S.sheet={t:clash(r.id,s,e)?'busy':'book',id:r.id};render()},
+ closesheet:(d,ev)=>{if(ev.target.classList.contains('sheet')){S.sheet=null;render()}},
+ cancel:d=>{if(S.cf!=d.v){S.cf=d.v;render();return}S.cf=null;const r=cancel(S.user,+d.v);say(r.err||'Booking cancelled')},
+ report:d=>{S.sheet={t:'report',id:+d.v};render()},annform:()=>{S.sheet={t:'ann'};render()},
+ delann:d=>{if(S.user.role!='admin')return;D.anns=D.anns.filter(a=>a.id!=d.v);save();say('Deleted')},
+ ask:d=>{S.chat.push({me:1,t:d.v},{me:0,t:answer(d.v)});render()}};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(el&&ACT[el.dataset.a])ACT[el.dataset.a](el.dataset,e)});
+document.addEventListener('change',e=>{const el=e.target;
+ if(el.dataset.f){S.q[el.dataset.f]=el.type=='number'?+el.value:el.value;render()}
+ if(el.dataset.c&&S.user?.role=='admin'){const id=el.dataset.id,k=el.dataset.c;
+  if(k=='role')D.users.find(u=>u.id==id).role=el.value;if(k=='cap')room(id).c=Math.max(1,+el.value||1);if(k=='on')room(id).on=el.checked;save();say('Saved')}});
+const FORM={
+ login:f=>{const u=D.users.find(x=>x.un==f.get('un').trim().toLowerCase()&&x.pw==f.get('pw'));if(!u)return say('Wrong username or password.');if(u.role!=S.lrole)return say(`This is a ${u.role} account. Choose the ${u.role} tab.`);S.user=u;S.tab='';render()},
+ signup:f=>{const un=f.get('un').trim().toLowerCase(),role=S.signupRole||'student';if(D.users.some(x=>x.un==un))return say('Username already taken.');
+  if(role=='admin'&&f.get('invite')!='DDUGU-ADMIN-2026')return say('Invalid admin invitation code.');
+  const u={id:'u'+Date.now(),name:f.get('name'),role,un,pw:f.get('pw')};
+  if(role=='student'){u.branch=f.get('br');u.yr=+f.get('yr');u.sec=f.get('sec')}
+  if(role=='faculty')u.department=f.get('department').trim();
+  D.users.push(u);save();S.user=u;S.lrole=role;S.su=false;S.tab='';render()},
+ resch:f=>{const s=new Date(f.get('date')+'T'+f.get('time')).getTime(),r=resched(S.user,S.sheet.id,s,s+f.get('dur')*6e4);S.sheet=null;say(r.err||'Rescheduled. Affected students notified.')},
+ csv:f=>{let n=0;f.get('csv').split('\n').forEach(l=>{const[a,b,c,d,e]=l.split(',').map(x=>x.trim());if(!a||!b||/^name$/i.test(a)||D.users.some(u=>u.un==b.toLowerCase()))return;D.users.push({id:'u'+Date.now()+n,name:a,role:'student',un:b.toLowerCase(),pw:'student123',branch:c||'',yr:+d||0,sec:e||''});n++});save();say(n+' students imported (password: student123)')},
+ book:f=>{const[s,e]=win(),r=book(S.user,{room:S.sheet.id,title:f.get('title'),type:f.get('type'),br:f.get('br'),yr:+f.get('yr'),sec:f.get('sec'),aud:[f.get('br')||'All branches',+f.get('yr')?'Year '+f.get('yr'):'',f.get('sec')?'Sec '+f.get('sec'):''].filter(Boolean).join(', '),start:s,end:e});
+  S.sheet=null;say(r.err||`✓ Booked ${room(r.ok.room).code}, ${fmt(s)}`)},
+ report:f=>{const b=D.bookings.find(y=>y.id==S.sheet.id);D.reports.unshift({who:S.user.name,msg:f.get('msg'),bt:b.title,t:Date.now()});log(b.id,'reported',f.get('msg'));save();S.sheet=null;say('Report sent. Official bookings are unchanged.')},
+ ann:f=>{if(S.user.role=='student')return;D.anns.unshift({id:Date.now(),title:f.get('title'),body:f.get('body'),kind:f.get('kind'),t:Date.now()});save();S.sheet=null;say('Published')},
+ user:f=>{D.users.push({id:'u'+Date.now(),name:f.get('name'),role:f.get('role'),branch:f.get('branch')||undefined});save();say('User added')},
+ room:f=>{if(D.rooms.some(r=>r.code==f.get('code')))return say('Room code already exists.');D.rooms.push({id:Date.now(),code:f.get('code'),b:f.get('b'),f:+f.get('f'),k:'classroom',c:+f.get('c'),on:true});save();say('Room added')},
+ chat:f=>{const t=f.get('t').trim();if(t){S.chat.push({me:1,t},{me:0,t:answer(t)});render()}}};
+document.addEventListener('submit',e=>{const f=e.target;if(f.dataset.form){e.preventDefault();FORM[f.dataset.form](new FormData(f))}});
+if(cloud){pull();setInterval(pull,5000)}
+render();
+</script></body></html>
